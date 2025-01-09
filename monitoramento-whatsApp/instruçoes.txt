@@ -1,0 +1,6 @@
+Para rodar esse sistema, vc vai precisar instalar fastAPI, que é a parte do back end.
+comando: 
+pip install "fastapi[standard]"
+uvicorn back-end:app --reload
+
+após isso,  vc tem que colocar a parte do front e back end para rodar juntas e então conseguir rodar o sistema 
