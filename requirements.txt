@@ -1,2 +1,3 @@
 pyecharts
 fastapi
+streamlit_echarts
