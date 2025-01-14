@@ -44,8 +44,12 @@ def dashboard_whatsapp():
         st.error(f"Erro ao carregar dados de interações por remetente: {response_remetente.status_code}")
 
 def gerar_grafico_horas_com_mais_mensagens(mensagens_por_hora):
-    distribuicao_horas = {str(hora): mensagens_por_hora.get(str(hora), 0) for hora in range(24)}  
-
+    # distribuicao_horas = {str(hora): mensagens_por_hora.get(str(hora), 0) for hora in range(24)}  
+  
+    distribuicao_horas={}
+    for hora in mensagens_por_hora.keys():
+        distribuicao_horas[str(hora)] = mensagens_por_hora[hora]
+  
     bar = (
         Bar()
         .add_xaxis(list(distribuicao_horas.keys()))
