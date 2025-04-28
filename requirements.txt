@@ -3,9 +3,5 @@ fastapi
 streamlit_echarts
 streamlit 
 PIL 
-streamlit_echarts 
-Grafico 
-Transformador_csv 
 Styles
-Processamento 
 warnings
