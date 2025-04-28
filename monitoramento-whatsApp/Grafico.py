@@ -27,30 +27,28 @@ def grafico_linha(mensagens_por_data):
 
 
 
+def grafico_horas_mais_movimentadas_por_data_especifica(mensagens_por_hora):
 
+    # Ordenando os dados pelas chaves (em ordem alfabética ou cronológica)
+    mensagens_ordenadas = dict(sorted(mensagens_por_hora.items(), key=lambda item: item[0], reverse=True))
+    print('mensagens_por_hora\n\n\n\n', mensagens_ordenadas)
 
-def grafico_horas_mais_movimentadas_por_dia(mensagens_por_data):
-    datas_ordenadas = sorted(mensagens_por_data.keys())
+    x_data = list(mensagens_ordenadas.keys())
+    y_data = list(mensagens_ordenadas.values())
 
-    datas_formatadas = [date.strftime('%Y-%m-%d') for date in datas_ordenadas]
-
-    
-    mensagens_ordenadas =  [mensagens_por_data[date] for date in datas_ordenadas]
-    print('grafico \n\n\n',mensagens_ordenadas)
-    
-    linha = (
-        Line()
-        .add_xaxis(datas_formatadas)
-        .add_yaxis("Quantidade de Mensagens", mensagens_ordenadas, is_smooth=True, label_opts=opts.LabelOpts(is_show=False))
+    # Criando o gráfico de barras
+    bar = (
+        Bar()
+        .add_xaxis([str(x) for x in x_data])  # Convertendo chaves para string
+        .add_yaxis("Valores", y_data)
+        .reversal_axis()  # Inverte para barras horizontais
         .set_global_opts(
-            title_opts=opts.TitleOpts(title="Mensagens por Dia"),
-            xaxis_opts=opts.AxisOpts(name="Data", type_="category", boundary_gap=False, axislabel_opts=opts.LabelOpts(rotate=45)),
-            yaxis_opts=opts.AxisOpts(name="Quantidade de Mensagens"),
-            tooltip_opts=opts.TooltipOpts(trigger="axis"),
-            toolbox_opts=opts.ToolboxOpts(),
+            title_opts=opts.TitleOpts(title="Gráfico de Barras Horizontais"),
+            xaxis_opts=opts.AxisOpts(name="Contagem"),
+            yaxis_opts=opts.AxisOpts(name="Categoria")
         )
     )
-    return linha
+    return bar
 
 
 
@@ -71,8 +69,7 @@ def grafico_semanal(mensagens_por_semana):
         return None
     
     distribuicao_dias = {str(dia): mensagens_dia.get(dia, 0) for dia in range(7)}
-    print('>>>>', list(distribuicao_dias.keys()))
-
+ 
     dias_da_semana = ["Segunda", "Terça", "Quarta", "Qui", "Sex", "Sáb", "Dom"]  # Rótulos dos dias da semana
 
     

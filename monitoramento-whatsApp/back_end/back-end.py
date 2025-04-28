@@ -55,7 +55,7 @@ def hora_com_mais_mensagens():
     
     mensagens_por_hora_dict = mensagens_por_hora.to_dict()  
     
-    # print('mensagens_por_hora_dict\n',{
+    # # print('mensagens_por_hora_dict\n',{
     #     "hora_com_mais_mensagens": {
     #         "hora": hora_mais_mensagens,
     #         "quantidade_mensagens": quantidade_mensagens
@@ -95,7 +95,7 @@ def pessoas_mais_interagem():
 
     mensagens_por_usuario_dict = mensagens_por_usuario.to_dict()
 
-    # print('ssssss\n',{
+    # # print('ssssss\n',{
     #     "usuario_mais_interacoes": {
     #         "usuario": usuario_mais_interacoes,
     #         "quantidade_interacoes": int(quantidade_interacoes)

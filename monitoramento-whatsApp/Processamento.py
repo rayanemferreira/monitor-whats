@@ -46,11 +46,61 @@ def datas_mais_movimentadas():
         
     
         top_7_datas_dict = top_7_datas.to_dict()
+        print('top_7_datas_dict\n\n\n\n', top_7_datas_dict)
 
     except Exception as e:
         top_7_datas_dict={}
 
     return top_7_datas_dict  
+
+
+ 
+def horas_mais_movimentadas(data_filtro):
+
+    try:
+        data = load_conversas_data()
+
+        if data.empty:
+            raise Exception("Nenhuma conversa encontrada.")
+        
+        # Converter a coluna 'Data' para datetime
+        data['Data'] = pd.to_datetime(data['Data'], errors='coerce')
+
+        if data['Data'].isnull().any():
+            raise Exception("Existem datas inválidas na base de dados.")
+        
+        # Se o filtro de data foi passado, aplicar o filtro
+        if data_filtro:
+            data_filtro = pd.to_datetime(data_filtro, errors='coerce')
+            if pd.isnull(data_filtro):
+                raise Exception("Formato de data inválido para o filtro.")
+            data = data[data['Data'].dt.date == data_filtro.date()]
+        
+        if data.empty:
+            raise Exception("Nenhuma mensagem encontrada para a data filtrada.")
+
+        # Criar nova coluna para hora
+        data['Hora'] = pd.to_datetime(data['Hora'], errors='coerce').dt.hour
+
+        # Agrupar por Hora
+        mensagens_por_hora = data.groupby('Hora').size()
+
+        if mensagens_por_hora.empty:
+            raise Exception("Não foi possível calcular os horários mais movimentados.")
+
+        # Reordenar por hora (crescente)
+        mensagens_por_hora = mensagens_por_hora.sort_index()
+
+        # Se quiser apenas os 10 horários mais movimentados *por hora ordenada*, basta pegar top 10 depois:
+        # mensagens_por_hora = mensagens_por_hora.sort_values(ascending=False).head(10).sort_index()
+
+        top_horas_dict = mensagens_por_hora.to_dict()
+
+    except Exception as e:
+        print("Erro:", e)
+        top_horas_dict = {}
+
+    return top_horas_dict
 
 def data_top7(top_7_datas):
    
