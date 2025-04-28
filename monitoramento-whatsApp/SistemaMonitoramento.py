@@ -1,85 +1,158 @@
 import streamlit as st
-import requests
-from pyecharts.charts import Bar
-from pyecharts import options as opts
+from PIL import Image
 from streamlit_echarts import st_pyecharts
+from Grafico import grafico_linha, grafico_semanal, gerar_grafico_interacoes_por_remetente, grafico_emojis_top_5
+from Transformador_csv import txt_para_csv
+from Styles import apply_styles
+from Processamento import datas_mais_movimentadas, movimentacao_semanal, top_emojis
 
-API_HORA_URL = "http://localhost:8000/hora_com_mais_mensagens"
-API_REMETENTE_URL = "http://localhost:8000/pessoas_mais_interagem"
+import warnings
+
+
+warnings.filterwarnings("ignore")
+
+# Inicializa uma flag global no session_state
+if 'file_flag' not in st.session_state:
+    st.session_state.file_flag = False
+
+if 'file_uploaded' not in st.session_state:
+    st.session_state.file_uploaded = None  
+
+st.set_page_config(
+    page_title="Monitoramento do WhatsApp",
+    layout="wide",
+)
+
 
 def dashboard_whatsapp():
-    st.title("Monitoramento do WhatsApp")
+    apply_styles()
 
-    st.header("Mensagens por Hora")
-    # response_hora = requests.get(API_HORA_URL)
-    response_hora = {'status_code':200,'hora_com_mais_mensagens': {'hora': 12, 'quantidade_mensagens': 27}, 'mensagens_por_hora': {10: 3, 12: 27, 13: 2, 14: 13, 15: 19, 16: 14, 17: 19, 18: 5, 19: 7, 20: 4, 21: 2, 22: 2}}
-    # if response_hora.status_code == 200:
-    if 1:
-    
-        dados_hora = response_hora #.json()
 
-        if "mensagens_por_hora" in dados_hora:
-            mensagens_por_hora = dados_hora["mensagens_por_hora"]
-            bar_chart_hora = gerar_grafico_horas_com_mais_mensagens(mensagens_por_hora)
-            st_pyecharts(bar_chart_hora)
-        else:
-            st.error("Dados de mensagens por hora não encontrados.")
+ 
+ 
+    # Inicializa uma flag global no session_state
+    if 'file_uploaded' not in st.session_state:
+        st.session_state.file_uploaded = False
+
+    # Se ainda não fez upload, mostra o uploader
+    if not st.session_state.file_uploaded:
+        st.title("Upload de Arquivo")
+        uploaded_file = st.file_uploader("Escolha um arquivo", type=["txt"])
+
+        # Quando o arquivo for enviado, ativa a flag
+        if uploaded_file is not None:
+            st.session_state.file_uploaded = True
+            st.session_state.uploaded_file = uploaded_file
+            st.rerun()  # Atualiza a tela para esconder o uploader
     else:
-        st.error(f"Erro ao carregar dados de mensagens por hora: {response_hora.status_code}")
+        # Quando já tiver feito upload, mostra o conteúdo
+        st.title("Arquivo Carregado com Sucesso!")
 
-    st.header("Interações por Usuario")
-    # response_remetente = requests.get(API_REMETENTE_URL)
-    response_remetente={'status_code':200,'usuario_mais_interacoes': {'usuario': ' Jackson', 'quantidade_interacoes': 13}, 'mensagens_por_usuario': {' Jackson': 13, ' +55 92 8467-6967': 12, ' +55 92 9472-8849': 9, ' +55 92 9465-6458': 8, ' +55 92 8471-0377': 7, ' +55 92 8216-5881': 7, ' Prof Marcela': 6, ' +55 92 8131-9982': 5, ' +55 92 8826-9491': 5, ' +55 92 8261-8754': 4, ' +55 92 9104-6440': 3, ' +55 92 8247-2041': 3, ' +55 92 8457-0207': 3, ' +55 92 8111-2310': 3, ' +55 92 8447-3035': 2, ' +55 92 8582-6530': 2, ' +55 92 9113-2808': 2, ' +55 92 9499-8837': 2, ' +55 92 8413-1864': 2, ' +55 92 9244-8687': 2, ' +55 92 9151-6646': 2, ' +55 92 8402-8408': 2, ' Gordinho': 2, ' +55 92 8404-0783': 1, ' Guilherme': 1, ' +55 92 9236-5943': 1, ' +55 97 8412-4499': 1, ' +55 92 8291-5304': 1, ' +55 92 9501-4742': 1, ' +55 92 8419-7189': 1, ' +55 92 9331-6807': 1, ' +55 92 8469-5287': 1, ' +55 92 9187-1406': 1, ' +55 92 9225-2762': 1}}
-    if 1:
-    # if response_remetente.status_code == 200:
-        dados_remetente = response_remetente#.json()
 
-        if "mensagens_por_usuario" in dados_remetente:
-            mensagens_por_usuario = dados_remetente["mensagens_por_usuario"]
-            bar_chart_remetente = gerar_grafico_interacoes_por_remetente(mensagens_por_usuario)
-            st_pyecharts(bar_chart_remetente)
-        else:
-            st.error("Dados de interações por remetente não encontrados.")
-    else:
-        st.error(f"Erro ao carregar dados de interações por remetente: {response_remetente.status_code}")
 
-def gerar_grafico_horas_com_mais_mensagens(mensagens_por_hora):
-    # distribuicao_horas = {str(hora): mensagens_por_hora.get(str(hora), 0) for hora in range(24)}  
   
-    distribuicao_horas={}
-    for hora in mensagens_por_hora.keys():
-        distribuicao_horas[str(hora)] = mensagens_por_hora[hora]
-  
-    bar = (
-        Bar()
-        .add_xaxis(list(distribuicao_horas.keys()))
-        .add_yaxis(" Quantidade de Mensagens", list(distribuicao_horas.values()))
-        .set_global_opts(
-            #title_opts=opts.TitleOpts(title="Mensagens por Hora"),
-            xaxis_opts=opts.AxisOpts(name="Hora", type_="category"),
-            yaxis_opts=opts.AxisOpts(name="Quant. de Mensagens"),
-            datazoom_opts=[opts.DataZoomOpts()],
-        )
-    )
-    return bar
+        if st.session_state.file_uploaded  is not None:
+            st.session_state.file_flag = True
 
-def gerar_grafico_interacoes_por_remetente(mensagens_por_usuario):
-    mensagens_por_usuario = dict(sorted(mensagens_por_usuario.items(), key=lambda item: item[1], reverse=True)[:4])
-    remetentes = list(mensagens_por_usuario.keys())
-    quantidades = list(mensagens_por_usuario.values())
+        try:
+            
+            text = st.session_state.uploaded_file.read().decode("utf-8")
+            csv_content = txt_para_csv(text) 
 
-    bar = (
-        Bar()
-        .add_xaxis(remetentes)
-        .add_yaxis("Quantidade de Mensagens", quantidades)
-        .set_global_opts(
-            #title_opts=opts.TitleOpts(title="Interações por Usuario"),
-            xaxis_opts=opts.AxisOpts(name="Mensagens", type_="value"),
-            yaxis_opts=opts.AxisOpts(name="Usuario", type_="category", axislabel_opts={"rotate": 0}),
-        )
-        .reversal_axis()
-    )
-    return bar
 
-if __name__ == "__main__":
-    dashboard_whatsapp()
+        
+            image = Image.open("usuario_editado.png")
+            image_resized = image.resize((290, 274))
+            st.image(image_resized, caption="Nome do Usuário")
+
+
+            
+            st.header("Engajamento do grupo")
+            try:
+                response_hora = datas_mais_movimentadas()  # Carrega os dados das datas mais movimentadas
+                if response_hora:
+                    line_chart_hora = grafico_linha(response_hora)
+                    st_pyecharts(line_chart_hora)
+                        # TODO ESCONDER OS UPLOAD AQUI
+
+                else:
+                    st.error("Dados de datas mais movimentadas não encontrados.")
+            except Exception as e:
+                st.error(f"Erro ao carregar dados de mensagens por data: {str(e)}")
+
+            st.header("Mensagens semanais")
+            try:
+                response_semana = movimentacao_semanal()  # Carrega os dados de movimentação semanal
+                if response_semana:
+                    bar_chart_semana = grafico_semanal(response_semana)
+                    st_pyecharts(bar_chart_semana)
+                else:
+                    st.error("Dados de semana não encontrados.")
+            except Exception as e:
+                st.error(f"Erro ao carregar dados de mensagens por semana: {e}")
+
+        
+            try:
+                dados_emoji = top_emojis()  # Carrega os dados de emojis
+                if 'Mensagem' in dados_emoji:
+                    mensagens_por_usuario = dados_emoji
+                    col1, col2 = st.columns([1, 1])
+
+                    with col1:
+                        st.header("Emoji mais utilizados")
+                        bar_chart_remetente = grafico_emojis_top_5(mensagens_por_usuario)
+                        if bar_chart_remetente:
+                            st_pyecharts(bar_chart_remetente)
+                        else:
+                            st.error("Erro ao gerar gráfico de emojis.")
+
+                    with col2:
+                        st.header("Engajamento do grupo")
+                        response_hora = datas_mais_movimentadas()
+                        if response_hora:
+                            line_chart_hora = grafico_linha(response_hora)
+                            st_pyecharts(line_chart_hora)
+                        else:
+                            st.error("Dados de datas mais movimentadas não encontrados.")
+                else:
+                    st.error("Erro ao processar os dados de emojis.")
+            except Exception as e:
+                st.error(f"Erro inesperado: {str(e)}")
+
+        except Exception as e:
+            st.error(f"Ocorreu um erro ao processar o arquivo: {e}")
+
+
+
+
+
+
+
+    # if not st.session_state.file_flag:
+     
+
+    #     st.markdown('<h1 class="title">Monitoramento do WhatsApp</h1>', unsafe_allow_html=True)
+        
+    #     # Exibe o carregamento enquanto o arquivo não for carregado
+    #     uploaded_file = st.file_uploader("Escolha um arquivo txt", type=["txt"]),
+
+    #     if uploaded_file is None:
+    #         # Exibe apenas a tela inicial de carregamento de arquivo
+    #         st.warning("Por favor, faça o upload de um arquivo TXT para começar.")
+    #     else:
+    #         st.session_state.file_uploaded=uploaded_file
+ 
+    # else:
+        # Quando já tiver feito upload, mostra o conteúdo
+         
+         
+            
+      
+
+
+
+
+
+ 
+
+dashboard_whatsapp()
