@@ -1,7 +1,7 @@
 import streamlit as st
 from PIL import Image
 from streamlit_echarts import st_pyecharts
-from Grafico import grafico_linha, grafico_semanal, gerar_grafico_interacoes_por_remetente, grafico_emojis_top_5
+from Grafico import grafico_horas_mais_movimentadas_por_dia,grafico_linha, grafico_semanal, gerar_grafico_interacoes_por_remetente, grafico_emojis_top_5
 from Transformador_csv import txt_para_csv
 from Styles import apply_styles
 from Processamento import datas_mais_movimentadas, movimentacao_semanal, top_emojis
@@ -67,14 +67,13 @@ def dashboard_whatsapp():
 
 
             
-            st.header("Engajamento do grupo")
+            st.header("Engajamento mensal do grupo ")
             try:
                 response_hora = datas_mais_movimentadas()  # Carrega os dados das datas mais movimentadas
                 if response_hora:
                     line_chart_hora = grafico_linha(response_hora)
                     st_pyecharts(line_chart_hora)
-                        # TODO ESCONDER OS UPLOAD AQUI
-
+ 
                 else:
                     st.error("Dados de datas mais movimentadas não encontrados.")
             except Exception as e:
@@ -110,7 +109,7 @@ def dashboard_whatsapp():
                         st.header("Engajamento do grupo")
                         response_hora = datas_mais_movimentadas()
                         if response_hora:
-                            line_chart_hora = grafico_linha(response_hora)
+                            line_chart_hora = grafico_horas_mais_movimentadas_por_dia(response_hora)
                             st_pyecharts(line_chart_hora)
                         else:
                             st.error("Dados de datas mais movimentadas não encontrados.")

@@ -24,6 +24,37 @@ def grafico_linha(mensagens_por_data):
     return linha
 
 
+
+
+
+
+
+def grafico_horas_mais_movimentadas_por_dia(mensagens_por_data):
+    datas_ordenadas = sorted(mensagens_por_data.keys())
+
+    datas_formatadas = [date.strftime('%Y-%m-%d') for date in datas_ordenadas]
+
+    
+    mensagens_ordenadas =  [mensagens_por_data[date] for date in datas_ordenadas]
+    print('grafico \n\n\n',mensagens_ordenadas)
+    
+    linha = (
+        Line()
+        .add_xaxis(datas_formatadas)
+        .add_yaxis("Quantidade de Mensagens", mensagens_ordenadas, is_smooth=True, label_opts=opts.LabelOpts(is_show=False))
+        .set_global_opts(
+            title_opts=opts.TitleOpts(title="Mensagens por Dia"),
+            xaxis_opts=opts.AxisOpts(name="Data", type_="category", boundary_gap=False, axislabel_opts=opts.LabelOpts(rotate=45)),
+            yaxis_opts=opts.AxisOpts(name="Quantidade de Mensagens"),
+            tooltip_opts=opts.TooltipOpts(trigger="axis"),
+            toolbox_opts=opts.ToolboxOpts(),
+        )
+    )
+    return linha
+
+
+
+
 def grafico_semanal(mensagens_por_semana):
     if not mensagens_por_semana:
         st.error("Nenhum dado de mensagens por semana encontrado.")
