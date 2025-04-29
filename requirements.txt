@@ -5,3 +5,4 @@ streamlit
 PIL 
 Styles
 warnings
+pandas
