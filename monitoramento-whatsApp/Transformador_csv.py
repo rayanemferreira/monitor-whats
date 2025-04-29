@@ -6,7 +6,7 @@ import streamlit as st
 def txt_para_csv(text):
     lines = text.splitlines()
 
-    with open('conversas.csv', mode='w', newline='', encoding='utf-8') as file:
+    with open('/workspaces/monitor-whats/conversas.csv', mode='w', newline='', encoding='utf-8') as file:
         csv_writer = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         
       
