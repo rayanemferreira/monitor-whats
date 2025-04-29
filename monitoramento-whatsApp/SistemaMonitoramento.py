@@ -1,13 +1,13 @@
 import streamlit as st
-from PIL import Image
+# from PIL import Image
 from streamlit_echarts import st_pyecharts
 from Grafico import grafico_horas_mais_movimentadas_por_data_especifica,grafico_linha, grafico_semanal, gerar_grafico_interacoes_por_remetente, grafico_emojis_top_5
 from Transformador_csv import txt_para_csv
 from Styles import apply_styles
 from Processamento import datas_mais_movimentadas, movimentacao_semanal, top_emojis, horas_mais_movimentadas
-import warnings
+# import warnings
 
-warnings.filterwarnings("ignore")
+# warnings.filterwarnings("ignore")
 
 if 'file_flag' not in st.session_state:
     st.session_state.file_flag = False
@@ -58,9 +58,9 @@ def dashboard_whatsapp():
 
 
         
-            image = Image.open("usuario_editado.png")
-            image_resized = image.resize((290, 274))
-            st.image(image_resized, caption="Nome do Usuário")
+            # image = Image.open("usuario_editado.png")
+            # image_resized = image.resize((290, 274))
+            # st.image(image_resized, caption="Nome do Usuário")
 
 
             
