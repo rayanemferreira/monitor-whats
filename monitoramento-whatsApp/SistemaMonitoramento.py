@@ -6,10 +6,10 @@ from Transformador_csv import txt_para_csv
 from Styles import apply_styles
 from Processamento import datas_mais_movimentadas, movimentacao_semanal, top_emojis, horas_mais_movimentadas
 
-import warnings
+# import warnings
 
 
-warnings.filterwarnings("ignore")
+# warnings.filterwarnings("ignore")
 
 # Inicializa uma flag global no session_state
 if 'file_flag' not in st.session_state:
@@ -43,7 +43,7 @@ def dashboard_whatsapp():
         if uploaded_file is not None:
             st.session_state.file_uploaded = True
             st.session_state.uploaded_file = uploaded_file
-            st.rerun()  # Atualiza a tela para esconder o uploader
+            # st.rerun()  # Atualiza a tela para esconder o uploader
     else:
         # Quando já tiver feito upload, mostra o conteúdo
         st.title("Arquivo Carregado com Sucesso!")

@@ -3,5 +3,4 @@ fastapi
 streamlit_echarts
 streamlit 
 Styles
-warnings
 pandas
