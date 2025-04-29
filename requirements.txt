@@ -2,7 +2,6 @@ pyecharts
 fastapi
 streamlit_echarts
 streamlit 
-PIL 
 Styles
 warnings
 pandas
