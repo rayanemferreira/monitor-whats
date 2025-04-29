@@ -43,7 +43,7 @@ def dashboard_whatsapp():
         if uploaded_file is not None:
             st.session_state.file_uploaded = True
             st.session_state.uploaded_file = uploaded_file
-            st.rerun()  # Atualiza a tela para esconder o uploader
+            # st.rerun()  # Atualiza a tela para esconder o uploader
     else:
         # Quando já tiver feito upload, mostra o conteúdo
         st.title("Arquivo Carregado com Sucesso!")
