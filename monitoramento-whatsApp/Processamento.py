@@ -6,7 +6,7 @@ import datetime
 import re
 from collections import Counter
 
-CONVERSAS_CSV = 'C:/Users/PROFNTI/Documents/GitHub/monitor-whats/conversas.csv'
+CONVERSAS_CSV = 'conversas.csv'
 
 
 def load_conversas_data() -> pd.DataFrame:
