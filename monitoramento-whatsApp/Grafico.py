@@ -29,23 +29,22 @@ def grafico_linha(mensagens_por_data):
 
 def grafico_horas_mais_movimentadas_por_data_especifica(mensagens_por_hora):
 
-    # Ordenando os dados pelas chaves (em ordem alfabética ou cronológica)
     mensagens_ordenadas = dict(sorted(mensagens_por_hora.items(), key=lambda item: item[0], reverse=True))
     print('mensagens_por_hora\n\n\n\n', mensagens_ordenadas)
 
     x_data = list(mensagens_ordenadas.keys())
     y_data = list(mensagens_ordenadas.values())
 
-    # Criando o gráfico de barras
+
+    
     bar = (
         Bar()
         .add_xaxis([str(x) for x in x_data])  # Convertendo chaves para string
-        .add_yaxis("Valores", y_data)
+        .add_yaxis("Valores", y_data, itemstyle_opts=opts.ItemStyleOpts(color="lightcoral") )
         .reversal_axis()  # Inverte para barras horizontais
         .set_global_opts(
-            title_opts=opts.TitleOpts(title="Gráfico de Barras Horizontais"),
-            xaxis_opts=opts.AxisOpts(name="Contagem"),
-            yaxis_opts=opts.AxisOpts(name="Categoria")
+            xaxis_opts=opts.AxisOpts(name="Quant."),
+            yaxis_opts=opts.AxisOpts(name="Hora")
         )
     )
     return bar
@@ -70,7 +69,7 @@ def grafico_semanal(mensagens_por_semana):
     
     distribuicao_dias = {str(dia): mensagens_dia.get(dia, 0) for dia in range(7)}
  
-    dias_da_semana = ["Segunda", "Terça", "Quarta", "Qui", "Sex", "Sáb", "Dom"]  # Rótulos dos dias da semana
+    dias_da_semana = ["Segunda", "Terça", "Quarta", "Qui", "Sex", "Sáb", "Dom"]  
 
     
     bar = (
@@ -78,7 +77,7 @@ def grafico_semanal(mensagens_por_semana):
         .add_xaxis(dias_da_semana)  
         .add_yaxis(
             "Quantidade de Mensagens", 
-            list(distribuicao_dias.values()),  # Quantidade de mensagens
+            list(distribuicao_dias.values()),  
             itemstyle_opts=opts.ItemStyleOpts(color="pink"),
         )
         .set_global_opts(

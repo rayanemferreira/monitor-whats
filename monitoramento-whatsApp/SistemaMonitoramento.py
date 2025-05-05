@@ -24,26 +24,23 @@ st.set_page_config(
 def dashboard_whatsapp():
     apply_styles()
 
-
- 
- 
-    # Inicializa uma flag global no session_state
+  
     if 'file_uploaded' not in st.session_state:
         st.session_state.file_uploaded = False
 
-    # Se ainda não fez upload, mostra o uploader
     if not st.session_state.file_uploaded:
-        st.title("Upload de Arquivo")
+        st.markdown("<h1 style='text-align: center;'>Monitoramento do WhatsApp</h1>",
+        unsafe_allow_html=True)
+       
         uploaded_file = st.file_uploader("Escolha um arquivo", type=["txt"])
 
-        # Quando o arquivo for enviado, ativa a flag
         if uploaded_file is not None:
             st.session_state.file_uploaded = True
             st.session_state.uploaded_file = uploaded_file
-            st.rerun()  # Atualiza a tela para esconder o uploader
+            st.rerun() 
     else:
-        # Quando já tiver feito upload, mostra o conteúdo
-        st.title("Arquivo Carregado com Sucesso!")
+        
+        st.title("Analise dos dados")
 
 
 
@@ -66,7 +63,7 @@ def dashboard_whatsapp():
             
             st.header("Engajamento mensal do grupo ")
             try:
-                response_hora = datas_mais_movimentadas()  # Carrega os dados das datas mais movimentadas
+                response_hora = datas_mais_movimentadas()  
                 if response_hora:
                     line_chart_hora = grafico_linha(response_hora)
                     st_pyecharts(line_chart_hora)
@@ -78,7 +75,7 @@ def dashboard_whatsapp():
 
             st.header("Mensagens semanais")
             try:
-                response_semana = movimentacao_semanal()  # Carrega os dados de movimentação semanal
+                response_semana = movimentacao_semanal()  
                 if response_semana:
                     bar_chart_semana = grafico_semanal(response_semana)
                     st_pyecharts(bar_chart_semana)
@@ -89,7 +86,7 @@ def dashboard_whatsapp():
 
         
             try:
-                dados_emoji = top_emojis()  # Carrega os dados de emojis
+                dados_emoji = top_emojis()  
                 if 'Mensagem' in dados_emoji:
                     mensagens_por_usuario = dados_emoji
                     col1, col2 = st.columns([1, 1])
@@ -103,7 +100,7 @@ def dashboard_whatsapp():
                             st.error("Erro ao gerar gráfico de emojis.")
 
                     with col2:
-                        st.header("Engajamento do grupo")
+                        st.header("Horas mais movimentadas")
                         response_hora = horas_mais_movimentadas('27/06/2022')
                         if response_hora:
                             line_chart_hora = grafico_horas_mais_movimentadas_por_data_especifica(response_hora)
@@ -117,36 +114,6 @@ def dashboard_whatsapp():
 
         except Exception as e:
             st.error(f"Ocorreu um erro ao processar o arquivo: {e}")
-
-
-
-
-
-
-
-    # if not st.session_state.file_flag:
-     
-
-    #     st.markdown('<h1 class="title">Monitoramento do WhatsApp</h1>', unsafe_allow_html=True)
-        
-    #     # Exibe o carregamento enquanto o arquivo não for carregado
-    #     uploaded_file = st.file_uploader("Escolha um arquivo txt", type=["txt"]),
-
-    #     if uploaded_file is None:
-    #         # Exibe apenas a tela inicial de carregamento de arquivo
-    #         st.warning("Por favor, faça o upload de um arquivo TXT para começar.")
-    #     else:
-    #         st.session_state.file_uploaded=uploaded_file
- 
-    # else:
-        # Quando já tiver feito upload, mostra o conteúdo
-         
-         
-            
-      
-
-
-
 
 
  
