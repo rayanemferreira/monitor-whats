@@ -5,3 +5,5 @@ streamlit
 Styles
 pandas
 joblib
+ntlk
+sklearn
