@@ -10,8 +10,7 @@ import re
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 
-model_path = 'C:\\Users\\PROFNTI\\Documents\\GitHub\\MONITOR-WHATS\\svm_modelo1copy.pkl'
-model = joblib.load(model_path)
+ 
 
 
 # import warnings
