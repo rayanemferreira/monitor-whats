@@ -6,4 +6,4 @@ Styles
 pandas
 joblib
 ntlk
-sklearn
+scikit-learn
