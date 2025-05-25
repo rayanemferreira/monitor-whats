@@ -1,6 +1,7 @@
-from pyecharts.charts import Bar, Line
+from pyecharts.charts import Bar, Line, Pie
 from pyecharts import options as opts
 import streamlit as st
+from collections import Counter
 
 
 
@@ -141,3 +142,21 @@ def gerar_grafico_interacoes_por_remetente(mensagens_por_usuario):
         .reversal_axis()
     )
     return bar
+
+
+
+
+def grafico_pizza_ia(genero_previsto):
+    contagem = Counter(genero_previsto)
+    data_pair = list(contagem.items()) 
+
+    pie = (
+        Pie()
+        .add("", data_pair)
+        .set_global_opts(
+            title_opts=opts.TitleOpts(title="categorias em alta"),
+            legend_opts=opts.LegendOpts(orient="vertical", pos_top="15%", pos_left="2%"),
+        )
+        .set_series_opts(label_opts=opts.LabelOpts(formatter="{b}: {c} ({d}%)"))
+    )
+    return pie

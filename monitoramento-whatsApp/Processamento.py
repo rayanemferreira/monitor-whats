@@ -3,9 +3,14 @@ import os
 import streamlit as st
 import pandas as pd
 import datetime
-import re
 from collections import Counter
+import re
+import joblib
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
 
+model_path = 'C:\\Users\\PROFNTI\\Documents\\GitHub\\MONITOR-WHATS\\svm_model1.pkl'
+model = joblib.load(model_path)
 CONVERSAS_CSV = '../conversas.csv'
 
 
@@ -25,8 +30,6 @@ def load_conversas_data() -> pd.DataFrame:
 
 def datas_mais_movimentadas():
     try:
-
-
         data = load_conversas_data()
 
         if data.empty:
@@ -91,8 +94,6 @@ def horas_mais_movimentadas(data_filtro):
         # Reordenar por hora (crescente)
         mensagens_por_hora = mensagens_por_hora.sort_index()
 
-        # Se quiser apenas os 10 horários mais movimentados *por hora ordenada*, basta pegar top 10 depois:
-        # mensagens_por_hora = mensagens_por_hora.sort_values(ascending=False).head(10).sort_index()
 
         top_horas_dict = mensagens_por_hora.to_dict()
 
@@ -144,13 +145,13 @@ def movimentacao_semanal():
  
         mensagens_por_semana = {}
         for (semana, dia_semana), count in mensagens_por_dia.items():
-            if isinstance(semana, datetime.datetime):  # Verifica se semana é um objeto datetime
-                semana_str = semana.strftime('%Y-%m-%d')  # Converte para string legível
+            if isinstance(semana, datetime.datetime): 
+                semana_str = semana.strftime('%Y-%m-%d') 
             else:
-                semana_str = datetime.datetime.fromtimestamp(semana).strftime('%Y-%m-%d')  # Se já for timestamp, converte
+                semana_str = datetime.datetime.fromtimestamp(semana).strftime('%Y-%m-%d')  
             
             if semana_str not in mensagens_por_semana:
-                mensagens_por_semana[semana_str] = {i: 0 for i in range(7)}  # Inicializa a semana com dias da semana
+                mensagens_por_semana[semana_str] = {i: 0 for i in range(7)}  
             
             mensagens_por_semana[semana_str][dia_semana] = count
 
@@ -205,6 +206,54 @@ def top_emojis():
         }
 
     return top_5_emojis_dict
+    
+
+
+
+
+# Função para pré-processamento de texto
+def preprocess_text(text):
+    stop_words = set(stopwords.words('portuguese'))
+    lemmatizer = WordNetLemmatizer()
+
+    text = re.sub(r'\W', ' ', text)
+    text = re.sub(r'\s+[a-zA-Z]\s+', ' ', text)
+    text = re.sub(r'\^[a-zA-Z]\s+', ' ', text)
+    text = re.sub(r'\s+', ' ', text, flags=re.I)
+    text = re.sub(r'^b\s+', '', text)
+    text = text.lower()
+
+    text = ' '.join([lemmatizer.lemmatize(word) for word in text.split() if word not in stop_words])
+    return text
+
+# Função para fazer previsão com base em um novo texto
+def predict_gender(text):
+    preprocessed_text = preprocess_text(text)
+    prediction = model.predict([preprocessed_text])
+    return prediction[0]
+
+def chama_ia():
+    genero_previsto = []
+    
+    data = load_conversas_data()
+
+    
+    for linha in data['Mensagem'].dropna():
+        resultado = predict_gender(linha)  
+        genero_previsto.append(resultado) 
+
+        
+    print("\n--- Gênero previsto para cada linha ---")
+    print(genero_previsto)
+
+    return genero_previsto
+
+
+
+
+ 
+
+    
 
 datas_mais_movimentadas()
 

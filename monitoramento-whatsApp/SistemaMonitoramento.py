@@ -1,10 +1,19 @@
 import streamlit as st
 # from PIL import Image
 from streamlit_echarts import st_pyecharts
-from Grafico import grafico_horas_mais_movimentadas_por_data_especifica,grafico_linha, grafico_semanal, gerar_grafico_interacoes_por_remetente, grafico_emojis_top_5
+from Grafico import grafico_horas_mais_movimentadas_por_data_especifica,grafico_linha, grafico_semanal, gerar_grafico_interacoes_por_remetente, grafico_emojis_top_5, grafico_pizza_ia
 from Transformador_csv import txt_para_csv
 from Styles import apply_styles
-from Processamento import datas_mais_movimentadas, movimentacao_semanal, top_emojis, horas_mais_movimentadas
+from Processamento import datas_mais_movimentadas, movimentacao_semanal, top_emojis, horas_mais_movimentadas,chama_ia
+import joblib
+import re
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+
+model_path = 'C:\\Users\\PROFNTI\\Documents\\GitHub\\MONITOR-WHATS\\svm_modelo1copy.pkl'
+model = joblib.load(model_path)
+
+
 # import warnings
 
 # warnings.filterwarnings("ignore")
@@ -52,6 +61,7 @@ def dashboard_whatsapp():
             
             text = st.session_state.uploaded_file.read().decode("utf-8")
             csv_content = txt_para_csv(text) 
+            print('\n\n\n\n\ncsv_content',csv_content)
 
 
         
@@ -62,6 +72,17 @@ def dashboard_whatsapp():
 
             
             st.header("Engajamento mensal do grupo ")
+            try:
+                response_ia = chama_ia()  
+                if response_ia:
+                    chama_grafico_ia = grafico_pizza_ia(response_ia)
+                    st_pyecharts(chama_grafico_ia)
+ 
+                else:
+                    st.error("Erro na IA")
+            except Exception as e:
+                st.error(f"Erro ao carregar dados {str(e)}")
+
             try:
                 response_hora = datas_mais_movimentadas()  
                 if response_hora:
@@ -115,7 +136,12 @@ def dashboard_whatsapp():
         except Exception as e:
             st.error(f"Ocorreu um erro ao processar o arquivo: {e}")
 
+        
 
- 
 
 dashboard_whatsapp()
+
+
+
+
+
