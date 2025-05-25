@@ -4,3 +4,4 @@ streamlit_echarts
 streamlit 
 Styles
 pandas
+joblib
