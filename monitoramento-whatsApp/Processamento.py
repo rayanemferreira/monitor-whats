@@ -9,7 +9,7 @@ import joblib
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 
-model_path = 'C:\\Users\\PROFNTI\\Documents\\GitHub\\MONITOR-WHATS\\svm_model1.pkl'
+model_path = '../svm_model1.pkl'
 model = joblib.load(model_path)
 CONVERSAS_CSV = '../conversas.csv'
 
