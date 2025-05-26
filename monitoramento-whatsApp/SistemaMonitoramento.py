@@ -7,12 +7,7 @@ from Styles import apply_styles
 from Processamento import datas_mais_movimentadas, movimentacao_semanal, top_emojis, horas_mais_movimentadas,chama_ia
 import joblib
 import re
-from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
-
  
-
-
 # import warnings
 
 # warnings.filterwarnings("ignore")

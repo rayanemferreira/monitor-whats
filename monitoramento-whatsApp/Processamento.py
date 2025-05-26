@@ -6,6 +6,11 @@ import datetime
 from collections import Counter
 import re
 import joblib
+import nltk
+nltk.download('stopwords')
+
+nltk.download('WordNetLemmatizer')
+
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 
