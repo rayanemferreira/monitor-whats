@@ -9,7 +9,7 @@ import joblib
 import nltk
 nltk.download('stopwords')
 
-nltk.download('WordNetLemmatizer')
+nltk.download('wordnet')
 
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
