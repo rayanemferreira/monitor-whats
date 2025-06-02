@@ -8,3 +8,4 @@ Styles
 pandas
 streamlit_echarts
 requests
+gdown

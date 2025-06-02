@@ -21,16 +21,19 @@ import requests
 from io import BytesIO
 
 # Link de download direto do Google Drive
-url = "https://drive.google.com/uc?export=download&id=1hgoaXawNSRGkM0ladjlEsBM0Pr1DN0S9"
+
+import gdown
+
+
+compartilhamento_url = "https://drive.google.com/uc?export=download&id=1hgoaXawNSRGkM0ladjlEsBM0Pr1DN0S9"
 
 def carregar_modelo():
-    response = requests.get(url)
-    response.raise_for_status()  # Levanta erro se houver falha no download
-    modelo = joblib.load(BytesIO(response.content))
+    output = 'modelo_temp.pkl'
+    gdown.download(compartilhamento_url, output, quiet=False)
+    modelo = joblib.load(output)
     return modelo
 
 model = carregar_modelo()
-
 # model_path = 'svm_model1.pkl'
 # model = joblib.load(model_path)
 CONVERSAS_CSV = '../conversas.csv'
