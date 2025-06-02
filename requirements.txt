@@ -1,9 +1,10 @@
+pip>=25.0
+ntlk
 pyecharts
 fastapi
-streamlit_echarts
 streamlit 
 Styles
 pandas
 joblib
-ntlk
 scikit-learn
+streamlit_echarts
