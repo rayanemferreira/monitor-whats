@@ -1,10 +1,9 @@
-pip>=25.0
-ntlk
+joblib
+scikit-learn
+nltk
 pyecharts
 fastapi
 streamlit 
 Styles
 pandas
-joblib
-scikit-learn
 streamlit_echarts
