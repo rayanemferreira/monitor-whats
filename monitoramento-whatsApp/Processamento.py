@@ -23,7 +23,6 @@ from io import BytesIO
 # Link de download direto do Google Drive
 url = "https://drive.google.com/uc?export=download&id=1hgoaXawNSRGkM0ladjlEsBM0Pr1DN0S9"
 
-@st.cache_resource
 def carregar_modelo():
     response = requests.get(url)
     response.raise_for_status()  # Levanta erro se houver falha no download
