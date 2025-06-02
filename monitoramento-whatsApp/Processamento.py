@@ -9,13 +9,31 @@ import joblib
 import nltk
 nltk.download('stopwords')
 
+
+
 nltk.download('wordnet')
 
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 
-model_path = 'svm_model1.pkl'
-model = joblib.load(model_path)
+
+import requests
+from io import BytesIO
+
+# Link de download direto do Google Drive
+url = "https://drive.google.com/uc?export=download&id=1hgoaXawNSRGkM0ladjlEsBM0Pr1DN0S9"
+
+@st.cache_resource
+def carregar_modelo():
+    response = requests.get(url)
+    response.raise_for_status()  # Levanta erro se houver falha no download
+    modelo = joblib.load(BytesIO(response.content))
+    return modelo
+
+model = carregar_modelo()
+
+# model_path = 'svm_model1.pkl'
+# model = joblib.load(model_path)
 CONVERSAS_CSV = '../conversas.csv'
 
 
